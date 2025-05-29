@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bitte bestätige deine E-Mail</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+      padding: 20px;
+    }
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    a.button {
+      background-color: #4da3ff;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>Bitte bestätige deine E-Mail-Adresse</h2>
+  <p>Danke, dass du dich bei PromptShop registriert hast.</p>
+  <p>Klicke auf den Button unten, um deine E-Mail zu bestätigen:</p>
+  <a href="{{ confirm_url }}" class="button">E-Mail bestätigen</a>
+  <p>Wenn der Button nicht funktioniert, kopiere folgenden Link in deinen Browser:</p>
+  <p><a href="{{ confirm_url }}">{{ confirm_url }}</a></p>
+  <p>Viele Grüße,<br>Dein PromptShop Team</p>
+</div>
+</body>
+</html>

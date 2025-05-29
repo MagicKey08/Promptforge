@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="hero">
+    <h1>Entdecke Premium Prompts</h1>
+    <p>Für Schule, Alltag, Kreativität & Code</p>
+    <a href="#produkte" class="btn big mt-2">Jetzt entdecken</a>
+</header>
+
+<main class="product-section" id="produkte">
+    <h2>📂 Unsere Prompt-Pakete</h2>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card" data-id="{{ product._id }}">
+            <img src="{{ url_for('static', filename='preview_images/' ~ product.preview_image) }}" alt="{{ product.title }}" class="product-img">
+            <h3>{{ product.title }}</h3>
+            <p>{{ product.description[:60] }}...</p>
+            <p><strong>{{ '%.2f'|format(product.price / 100) }} €</strong></p>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeProductModal()">&times;</span>
+        <img id="modalImage" src="" class="modal-img">
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <p id="modalPrice"></p>
+        <div class="modal-actions">
+            <form method="POST" action="" id="addToCartForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn">🛒 In den Warenkorb</button>
+            </form>
+            <a id="buyNowLink" class="btn small">💳 Sofort kaufen</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

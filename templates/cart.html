@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>🛒 Dein Warenkorb</h2>
+
+    {% if cart_items %}
+    <div class="cart-summary">
+        {% for entry in cart_items %}
+        <div class="cart-item-box">
+            <div class="cart-item-content">
+                <div>
+                    <strong class="text-large">{{ entry.product.title }}</strong><br>
+                    <span class="text-muted">{{ entry.quantity }}× {{ '%.2f'|format(entry.product.price / 100) }} €</span>
+                </div>
+                <div class="cart-controls">
+                    <form method="POST" action="{{ url_for('decrease_quantity', product_id=entry.product._id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn small" type="submit">➖</button>
+                    </form>
+                    <span>{{ entry.quantity }}</span>
+                    <form method="POST" action="{{ url_for('increase_quantity', product_id=entry.product._id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn small" type="submit">➕</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('remove_all_from_cart', product_id=entry.product._id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn danger small" type="submit">🗑️ Entfernen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="mt-4">
+            <p class="text-large"><strong>Gesamtsumme:</strong> {{ '%.2f'|format(total) }} €</p>
+
+            <form action="{{ url_for('checkout_cart') }}" method="POST" class="checkout-methods mt-3">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="payment-selection">
+                    <label class="payment-tile">
+                        <input type="radio" name="payment_method" value="stripe" checked>
+                        <div class="payment-visual">💳</div>
+                        <div class="payment-label">Kreditkarte<br><small>(Stripe)</small></div>
+                    </label>
+                    <label class="payment-tile">
+                        <input type="radio" name="payment_method" value="paypal">
+                        <div class="payment-visual">🅿️</div>
+                        <div class="payment-label">PayPal</div>
+                    </label>
+                </div>
+
+                <label class="mt-2">🎟️ Rabattcode:</label>
+                <input type="text" name="coupon" placeholder="Code eingeben">
+
+                <button type="submit" class="btn big w-100 mt-2">💳 Jetzt zur Kasse</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <p class="mt-2">Dein Warenkorb ist leer.</p>
+    <a href="{{ url_for('index') }}" class="btn mt-2">Zurück zum Shop</a>
+    {% endif %}
+</div>
+{% endblock %}

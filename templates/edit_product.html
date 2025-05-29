@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>✏️ Produkt bearbeiten</h2>
+
+    <form method="POST" class="mt-2">
+        {{ csrf_token() }}
+        <input type="text" name="title" value="{{ product.title }}" placeholder="Titel" required>
+        <input type="text" name="price" value="{{ '%.2f'|format(product.price / 100) }}" placeholder="Preis in €" required>
+        <input type="text" name="description" value="{{ product.description }}" placeholder="Kurzbeschreibung" required>
+
+        <div class="flex gap-2 mt-3">
+            <button type="submit" class="btn w-100">Speichern</button>
+            <a href="{{ url_for('admin') }}" class="btn danger w-100 text-center">Abbrechen</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

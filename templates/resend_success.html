@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container text-center">
+    <h2 class="success">📧 E-Mail erneut gesendet</h2>
+    <p class="mt-2">Bitte überprüfe dein Postfach.</p>
+    <p class="mt-1 text-muted">Du wirst automatisch weitergeleitet ...</p>
+</div>
+<meta http-equiv="refresh" content="5;url={{ url_for('login') }}">
+{% endblock %}

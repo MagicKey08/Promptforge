@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container text-center">
+    <h2 class="success">🎉 Zahlung erfolgreich!</h2>
+    <p class="mt-2">Vielen Dank für deinen Kauf!</p>
+    <p class="mt-1">Deine gekauften Produkte findest du unter:</p>
+
+    <a class="btn mt-3" href="{{ url_for('orders') }}">📦 Meine Bestellungen anzeigen</a>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title or "PromptShop" }}</title>
+    <script>
+        (() => {
+            const theme = localStorage.getItem("theme") || "system";
+            const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+            if (theme === "light" || (theme === "system" && prefersLight)) {
+                document.documentElement.classList.add("light");
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav>
+    <a class="logo" href="{{ url_for('index') }}">🧠 PromptForge</a>
+
+    <button id="mobileMenuToggle" class="hamburger" aria-label="Menü öffnen" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
+
+    <ul class="nav-links" id="mobileMenu">
+        <!-- Warenkorb -->
+        <li class="dropdown" id="cartWrapper">
+            <span class="avatar" id="cartAvatar" tabindex="0">🛍️{% if session.cart %} ({{ session.cart|length }}){% endif %}</span>
+            <ul class="dropdown-menu mini-cart" id="cartDropdown">
+                {% if session.cart %}
+                {% set counts = {} %}
+                {% for pid in session.cart %}
+                {% set counts = counts.update({pid: counts.get(pid, 0) + 1}) %}
+                {% endfor %}
+                {% for pid, quantity in counts.items() %}
+                {% set item = products_collection.find_one({'_id': ObjectId(pid)}) %}
+                {% if item %}
+                <li>
+                    <div class="mini-cart-item">
+                        <span class="mini-title">{{ item.title[:22] }}</span>
+                        <span class="mini-qty">×{{ quantity }}</span>
+                        <span class="mini-price">{{ '%.2f'|format(item.price / 100 * quantity) }} €</span>
+                    </div>
+                </li>
+                {% endif %}
+                {% endfor %}
+                <li><hr></li>
+                <li><a href="{{ url_for('cart') }}" class="btn small w-100">🛒 Zum Warenkorb</a></li>
+                {% else %}
+                <li>🪙 Noch leer</li>
+                {% endif %}
+            </ul>
+        </li>
+
+        <!-- Benutzer -->
+        {% if current_user.is_authenticated %}
+        <li class="dropdown" id="userWrapper">
+            <span class="avatar" id="userAvatar" tabindex="0">👤</span>
+            <ul class="dropdown-menu" id="userDropdown">
+                <li class="dropdown-label">{{ current_user.email }}</li>
+                <li><a href="{{ url_for('settings') }}">⚙️ Einstellungen</a></li>
+                {% if current_user.role == 'admin' %}
+                <li><a href="{{ url_for('admin') }}">📦 Adminbereich</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+            </ul>
+        </li>
+        {% else %}
+        <li><a href="{{ url_for('login') }}" class="btn">Login</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="toast-container">
+        {% for category, message in messages %}
+        <div class="toast show {{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+
+<script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>

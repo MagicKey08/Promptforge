@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>💳 Bezahlvorgang</h2>
+    <p class="mt-2">Produkt: <strong>{{ product_name }}</strong></p>
+
+    <form method="POST" class="mt-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="payment-selection">
+            <label class="payment-tile">
+                <input type="radio" name="payment_method" value="stripe" checked>
+                <div class="payment-visual">💳</div>
+                <div class="payment-label">Kreditkarte<br><small>(Stripe)</small></div>
+            </label>
+            <label class="payment-tile">
+                <input type="radio" name="payment_method" value="paypal">
+                <div class="payment-visual">🅿️</div>
+                <div class="payment-label">PayPal</div>
+            </label>
+        </div>
+
+        <label for="coupon" class="mt-3">🎟️ Rabattcode:</label>
+        <input type="text" id="couponInput" name="coupon" placeholder="Code eingeben">
+        <p id="livePrice" class="mt-1 text-muted">Preis: {{ '%.2f'|format(product["price"] / 100) }} €</p>
+
+        <button type="submit" class="btn big w-100 mt-2">🔐 Jetzt bezahlen</button>
+    </form>
+
+    <a href="{{ url_for('index') }}" class="btn small mt-2">⬅ Zurück zum Shop</a>
+</div>
+{% endblock %}

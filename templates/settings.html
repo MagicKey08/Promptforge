@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>⚙️ Kontoeinstellungen</h2>
+
+    <!-- Theme Auswahl -->
+    <form method="POST" action="{{ url_for('update_theme') }}" class="mt-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="themeSelect"><strong>Farbschema:</strong></label>
+        <select id="themeSelect" name="theme" class="mt-1">
+            <option value="system" {% if selected_theme == "system" %}selected{% endif %}>Systemstandard</option>
+            <option value="light" {% if selected_theme == "light" %}selected{% endif %}>Hell</option>
+            <option value="dark" {% if selected_theme == "dark" %}selected{% endif %}>Dunkel</option>
+        </select>
+        <button type="submit" class="btn small mt-2">Speichern</button>
+    </form>
+
+    <!-- Sprache (inaktiv) -->
+    <div class="mt-3">
+        <label><strong>Sprache:</strong> <span class="text-muted">(Bald verfügbar)</span></label>
+        <select disabled class="mt-1">
+            <option>Deutsch</option>
+            <option>English</option>
+        </select>
+    </div>
+
+    <!-- Newsletter -->
+    <form method="POST" action="{{ url_for('update_newsletter') }}" class="mt-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label><strong>Newsletter:</strong></label><br>
+        <label>
+            <input type="checkbox" name="newsletter" {% if current_user.newsletter %}checked{% endif %}>
+            Ich möchte Updates & Angebote per Mail
+        </label>
+        <button type="submit" class="btn small mt-2">Speichern</button>
+    </form>
+
+    <!-- Passwort ändern -->
+    <form method="POST" action="{{ url_for('change_password') }}" class="mt-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label><strong>Passwort ändern:</strong></label>
+        <input type="password" name="current_password" placeholder="Aktuelles Passwort" required>
+        <input type="password" name="new_password" placeholder="Neues Passwort" required>
+        <input type="password" name="confirm_password" placeholder="Neues Passwort wiederholen" required>
+        <button type="submit" class="btn mt-2">Aktualisieren</button>
+    </form>
+
+    <!-- Account löschen -->
+    <form method="POST" action="{{ url_for('delete_account') }}"
+          onsubmit="return confirm('Willst du deinen Account wirklich löschen? Dies ist nicht rückgängig.');"
+          class="mt-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label><strong class="danger">Account löschen:</strong></label><br>
+        <button type="submit" class="btn danger mt-2">Endgültig löschen</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container text-center">
+    <h2>🔒 E-Mail nicht bestätigt</h2>
+    <p class="mt-2">Bitte bestätige zuerst deine E-Mail-Adresse, um fortzufahren.</p>
+
+    <form method="POST" action="{{ url_for('resend_verification') }}" class="mt-3">
+        {{ csrf_token() }}
+        <input type="hidden" name="email" value="{{ user_email }}">
+        <button type="submit" class="btn w-100">📧 E-Mail erneut senden</button>
+    </form>
+
+    <p class="mt-2 text-muted">Du wirst gleich weitergeleitet ...</p>
+</div>
+<meta http-equiv="refresh" content="8;url={{ url_for('login') }}">
+{% endblock %}

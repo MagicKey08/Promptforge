@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container text-center">
+    <h2 class="danger">🚫 Kein Zugriff</h2>
+    <p class="mt-2">Du darfst diese Seite nicht aufrufen.</p>
+    <a href="{{ url_for('index') }}" class="btn mt-3">⬅ Zur Startseite</a>
+</div>
+{% endblock %}

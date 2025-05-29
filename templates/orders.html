@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>📦 Deine Bestellungen</h2>
+
+    {% if orders %}
+    <table>
+        <thead>
+        <tr>
+            <th>Datei</th>
+            <th>Datum</th>
+            <th>Status</th>
+            <th>Download</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.file }}</td>
+            <td>{{ order.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <a class="btn small" href="{{ url_for('download', filename=order.file) }}"
+                   {% if not order.downloadable %}style="pointer-events:none;opacity:0.6;"{% endif %}>
+                    📥 Herunterladen
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Du hast noch keine Bestellungen.</p>
+    {% endif %}
+</div>
+{% endblock %}

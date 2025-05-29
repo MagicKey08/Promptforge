@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container text-center">
+    <h2>📨 E-Mail-Bestätigung gesendet</h2>
+    <p class="mt-2">Bitte prüfe deine E-Mails und bestätige dein Konto über den Link.</p>
+    <p class="mt-1 text-muted">Du wirst gleich weitergeleitet ...</p>
+</div>
+<meta http-equiv="refresh" content="5;url={{ url_for('login') }}">
+{% endblock %}

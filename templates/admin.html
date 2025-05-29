@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>📤 Neues Produkt hochladen</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="text" name="title" placeholder="Titel" required>
+        <input type="text" name="price" placeholder="Preis in €" required>
+        <input type="text" name="description" placeholder="Kurzbeschreibung" required>
+        <label for="fileInput" class="btn mt-1">📎 PDF-Datei auswählen</label>
+        <input type="file" id="fileInput" name="file" accept=".pdf" style="display: none;" required>
+
+        <label for="imageInput" class="btn mt-1">🖼️ Vorschaubild auswählen</label>
+        <input type="file" id="imageInput" name="preview_image" accept="image/*" style="display: none;">
+
+        <div id="dropZone" class="drop-zone mt-2">🖼️ Vorschau hierher ziehen oder klicken</div>
+        <img id="imagePreview" class="mt-2" style="max-width: 100%; border-radius: 8px; display: none;">
+
+        <button type="submit" class="btn mt-2">Hochladen</button>
+    </form>
+</div>
+
+<div class="form-container mt-4">
+    <h2>🎟️ Rabattcode erstellen</h2>
+    <form method="POST" action="{{ url_for('create_coupon') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="text" name="code" placeholder="Code z. B. SOMMER25" required>
+        <input type="number" name="discount" placeholder="Rabatt in %" min="1" max="100" required>
+        <button type="submit" class="btn mt-2">Erstellen</button>
+    </form>
+</div>
+
+<div class="product-list">
+    <h2>🧾 Alle Produkte</h2>
+    {% if products %}
+    <table>
+        <thead>
+        <tr>
+            <th>Titel</th>
+            <th>Beschreibung</th>
+            <th>Preis</th>
+            <th>Datei</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.title }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ '%.2f'|format(product.price / 100) }} €</td>
+            <td><a href="{{ url_for('download', filename=product.file) }}" target="_blank">{{ product.file }}</a></td>
+            <td class="flex gap-1">
+                <a class="btn small" href="{{ url_for('edit_product', product_id=product._id) }}">Bearbeiten</a>
+                <form method="POST" action="{{ url_for('delete_product', product_id=product._id) }}"
+                      onsubmit="return confirm('Wirklich löschen?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn danger small" type="submit">Löschen</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Keine Produkte vorhanden.</p>
+    {% endif %}
+</div>
+
+<div class="product-list">
+    <h2>📈 Bestellungen</h2>
+    {% if orders %}
+    <table>
+        <thead>
+        <tr>
+            <th>E-Mail</th>
+            <th>Datei</th>
+            <th>Datum</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.email }}</td>
+            <td>{{ order.file }}</td>
+            <td>{{ order.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Keine Bestellungen vorhanden.</p>
+    {% endif %}
+</div>
+{% endblock %}

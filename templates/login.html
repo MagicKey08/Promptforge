@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>🔐 Login</h2>
+
+    <form method="POST" class="mt-2">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="email" name="email" placeholder="E-Mail-Adresse" required>
+        <input type="password" name="password" placeholder="Passwort" required>
+
+        <div class="g-recaptcha mt-2" data-sitekey="6LeEGUgrAAAAAOyxKSo_1IXvIbtBm3v2vBKXg7NU"></div>
+
+        <button type="submit" class="btn mt-3">➡ Anmelden</button>
+    </form>
+
+    <p class="mt-3 text-muted">
+        Noch kein Konto? <a href="{{ url_for('signup') }}">Jetzt registrieren</a>
+    </p>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
