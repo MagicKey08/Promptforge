@@ -1,0 +1,14 @@
+Flask
+Flask-Bcrypt
+Flask-Login
+Flask-Mail
+Flask-WTF
+Flask-Limiter
+pymongo
+dnspython
+python-dotenv
+itsdangerous
+stripe
+paypalrestsdk
+requests
+xhtml2pdf

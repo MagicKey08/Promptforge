@@ -110,7 +110,6 @@ def verify_recaptcha(response_token):
     }).json()
     return res.get("success", False)
 
-
 # === Startseite ===
 @app.route('/')
 def index():
